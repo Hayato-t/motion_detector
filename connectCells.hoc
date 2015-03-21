@@ -177,7 +177,8 @@ proc connectOutput2Cells() { local i, j, k,l, pargid, num_ecell_out2, num_syn, n
         if(pc.gid_exists(i+num_cell_i_o1)){
             for j=0, num_cell_out2-1{
                 for(k=0;k<con_out2.x[i][j];k=k+1){
-                    for l=0, branch_num-1 {
+                    //for l=0, branch_num-1 {
+		    l = 0
                         syn = pc.gid2cell(i+num_cell_i_o1).makeSyn(i,j,num_ecell_out2,int(num_ecell_out2/4),1,num_ecell_out2,num_ecell_out2+int((num_cell_out2-num_ecell_out2)/4),l,con_order_out2.x[i*branch_num+l][counter]/19.0)
                         nc = pc.gid_connect((j+num_cell_i_o1)*2+1+num_cell_full,syn)
                         counter = counter + 1
@@ -190,7 +191,7 @@ proc connectOutput2Cells() { local i, j, k,l, pargid, num_ecell_out2, num_syn, n
                             nc.weight = 0.03//0.1
                         }
                         
-                    }
+                    //}
                     counter = 0
                 }
                 
@@ -238,7 +239,7 @@ proc connectI2O(){local i, j, k, l, num_ecell, num_cell_out1, num_ecell_out1, nu
         }
     }
     
-    
+    /*
     for i=0, num_cell_out2-1 {
         if(pc.gid_exists(i+num_cell_i_o1)){
             //for j=0, num_ecell-1{
@@ -257,7 +258,7 @@ proc connectI2O(){local i, j, k, l, num_ecell, num_cell_out1, num_ecell_out1, nu
                 }
             }
         }
-    }
+    }*/
 }
 
 proc subst(){local i
