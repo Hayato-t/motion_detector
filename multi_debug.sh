@@ -1,9 +1,9 @@
 #!/bin/bash -x
 #
-#PJM --rsc-list "rscgrp=short"
-#PJM --rsc-list "node=62"
-#PJM --rsc-list "elapse=01:10:00"
-#PJM --mpi "proc=992"
+#PJM --rsc-list "rscgrp=debug"
+#PJM --rsc-list "node=60"
+#PJM --rsc-list "elapse=00:3:00"
+#PJM --mpi "proc=960"
 #PJM --stg-transfiles all
 #PJM --mpi "use-rankdir"
 

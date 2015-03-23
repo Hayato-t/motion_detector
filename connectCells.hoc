@@ -55,7 +55,7 @@ proc connectInputCells() { local i, j, k, targid, num_ecell,num_vta, num_cell, n
                 for k=0, num_cell-1 {
                     if(con.x[i][k%num_ecell]){
                         syn = pc.gid2cell(i).makeSyn(i,k,num_ecell,num_vta,0,0,0,j,con_order_input.x[i*branch_num+j][counter]/16.0)
-                        nc = pc.gid_connect((con.x[i][k%num_ecell]-1)+j*2+num_cell_full,syn)
+                        nc = pc.gid_connect((con.x[i][k%num_ecell]-1)+k*2+num_cell_full,syn)
                         counter = counter + 1
                         //printf("my host id = %d, parent(pre) cell id = %d(e->e)\n",pc.id,k)
                         nclist.append(nc)
@@ -74,7 +74,7 @@ proc connectInputCells() { local i, j, k, targid, num_ecell,num_vta, num_cell, n
                 for k=0, num_ecell-1 {
                     if(con.x[i][k]){
                         syn = pc.gid2cell(i+num_ecell).makeSyn(i+num_ecell,k,num_ecell,num_vta,0,0,0,j,con_order_input.x[i*branch_num+j][counter]/16.0)
-                        nc = pc.gid_connect((con.x[i][j]-1)+j*2+num_cell_full,syn)
+                        nc = pc.gid_connect((con.x[i][j]-1)+k*2+num_cell_full,syn)
                         counter = counter + 1
                         nclist.append(nc)
                         nc.threshold = 0
@@ -127,7 +127,7 @@ proc connectOutput1Cells() { local i, j, k,l, pargid, num_ecell_out1, num_syn, n
     
     
     for i=0, num_cell_out1-1 {
-        if(pc.gid_exists(i)){
+        if(pc.gid_exists(i+num_cell_input)){
             for j=0, num_cell_out1-1{
                 for(k=0;k<con_out1.x[i][j];k+=1){
                     for l=0, branch_num-1 {

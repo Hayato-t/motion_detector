@@ -33,13 +33,13 @@ NCELL_FULL = NCELL + NCELL_OUT1 + NCELL_OUT2
 
 BRANCH_NUM = 10
 
-LEARNING_TIMES = 3//6//3//2//1//2//30
+LEARNING_TIMES = 6//3//2//1//2//30
 STIM_DUR = 1000//10000//75000//5000//390000//230000//200000//75000//140000//75000<-55m//100000//25000//2000//5//30 //until now(12/20), here is not changed, so it may cause the learning unproceeding??
 STIM_DUR_MOVE = 1000000
 START_STIM = 20
 
 dt = 0.025//<-for test0.1//0.025
-tstop_max = 20000//35000//30000//15000//10000//75000//5000//390000//230000//200000//75000//140000//75000//25000//15000//30//20//3000//1000//200//1000//200//tstop = dt*10//10//200//500//100000
+tstop_max = 35000//30000//15000//10000//75000//5000//390000//230000//200000//75000//140000//75000//25000//15000//30//20//3000//1000//200//1000//200//tstop = dt*10//10//200//500//100000
 t = 0
 stimInt = 25//50//30//should be less than 40Hz ??//<-learn7 66//<-learn2 learn1->//40//66//40//20//1000
 stimNum = 36//76//80//600//1600//1540//650//450//200//100//100//7//50//7//int(tstop/stimInt)
@@ -59,23 +59,27 @@ load_file("connectCells.hoc")
 load_file("setStim.hoc")
 load_file("signalDA.hoc")
 //load_file("myrun.hoc")
-read_mat(NCELL_E,NCELL_OUT1, NCELL_OUT2)
+read_mat(NCELL_E,NCELL_OUT1, NCELL_OUT2,BRANCH_NUM)
 makeCells(NCELL_FULL,BRANCH_NUM)
 makeConvert(NCELL_FULL)
 pc.barrier()
+printf("finich make section\n")
 //checkgid()
 //pc.barrier()
 //initCount()
 connectInputCells(NCELL_E, NCELL_VTA, NCELL, NCELL_FULL,BRANCH_NUM)
+printf("connect input is end \n")
 connectOutput1Cells(NCELL_OUT1_E,NCELL_VTA,NCELL_OUT1,NCELL,NCELL_FULL,BRANCH_NUM)
+printf("connect output1 is end \n")
 connectOutput2Cells(NCELL_OUT2_E,NCELL_VTA,NCELL_OUT2,NCELL+NCELL_OUT1,NCELL_FULL,BRANCH_NUM)
+printf("connect output2 is end \n")
 connectI2O(NCELL_E,NCELL_OUT1,NCELL_OUT1_E,NCELL_OUT2,NCELL_OUT2_E,NCELL_VTA,NCELL,BRANCH_NUM)
-
-{con.resize(1,1)}
-{con_out1.resize(1,1)}
-{con_out2.resize(1,1)}
-{con_i2o1.resize(1,1)}
-{con_i2o2.resize(1,1)}
+printf("connect i2o is end \n")
+// {con.resize(1,1)}
+// {con_out1.resize(1,1)}
+// {con_out2.resize(1,1)}
+// {con_i2o1.resize(1,1)}
+// {con_i2o2.resize(1,1)}
 
 {con_order_input.resize(1,1)}
 {con_order_out1.resize(1,1)}
@@ -191,7 +195,7 @@ for(time=0;time<tstop_max;time+=datiming){
     /*if(time>=tstop_max-dt){
 	printf("\n\n\nt=%lf\n\n\n",t)
     }*/
-    pc.psolve(tstop+datiming)
+    pc.psolve(time+datiming)
     pc.barrier()
     //tstop += steptime
     //if(time>=datiming){
