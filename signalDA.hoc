@@ -48,7 +48,7 @@ proc signalDA() {local i, j, k, counter, tmpDA, num_vta, num_ecell, nsyn_max, bu
 	for(i=0;i<resv.size;i+=1){
 	    bcaster.x(0) += resv.x(i)
 	}
-	tmpDA = tmpDA + DOPAMINE*bcaster.x(0)//0.01*bcaster.x(0)
+	tmpDA = tmpDA + DOPAMINE*2*bcaster.x(0)//0.01*bcaster.x(0)
 	//tmpDA = tmpDA + 0.04*bcaster.x(0)
 	bcaster.x(0) = tmpDA
     }

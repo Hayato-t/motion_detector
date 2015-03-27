@@ -47,7 +47,7 @@ proc setStim(){local i, j, stim_num, num_vta, dur, num_cs, stim_int, num_ecell_i
 			    us_tmp.interval = stim_int//*2
 			    us_tmp.noise = 0.001
 			    us.append(us_tmp)
-			    nc = new NetCon(us_tmp,pc.gid2cell(i+512).synlist.object(1),0,0.1,0.05)
+			    nc = new NetCon(us_tmp,pc.gid2cell(i+512).synlist.object(1),0,0.1,0.1)
 			    nclist_us.append(nc)
 			//}
 		    }
@@ -72,7 +72,7 @@ proc setStim(){local i, j, stim_num, num_vta, dur, num_cs, stim_int, num_ecell_i
 			cs_tmp.interval = stim_int
 			cs_tmp.noise = 0//0.05
 			cs.append(cs_tmp)
-			nc = new NetCon(cs_tmp,pc.gid2cell(i).synlist.object(0),0,0.1,0.05)
+			nc = new NetCon(cs_tmp,pc.gid2cell(i).synlist.object(0),0,0.1,0.1)
 			nclist_cs.append(nc)
 			
 			
@@ -94,7 +94,7 @@ proc setStim(){local i, j, stim_num, num_vta, dur, num_cs, stim_int, num_ecell_i
 			cs_tmp.number = 25
 			cs_tmp.noise = 0
 			cs.append(cs_tmp)
-			nc = new NetCon(cs_tmp,pc.gid2cell(i).synlist.object(0),0,0.1,0.05)
+			nc = new NetCon(cs_tmp,pc.gid2cell(i).synlist.object(0),0,0.1,0.1)
 			nclist_cs.append(nc)
 		    }
 		}
