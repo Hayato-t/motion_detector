@@ -226,7 +226,7 @@ for(time=0;time<tstop_max;time+=datiming){
     }
     
     rec_timing += 1
-    if(rec_timing==40 && time<startTest){
+    if(rec_timing==10 && time<startTest){
 	rec_timing = 0
 	//weight_rec_i[rec_counter] = new Vector(nclist.count)
 	//weight_rec_o1[rec_counter] = new Vector(nclist_out1.count)

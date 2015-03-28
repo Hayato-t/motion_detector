@@ -163,7 +163,7 @@ obfunc makeSyn() {local targetno, hostno, num_ecell, num_vta, rw_flag, start_i, 
 	    //synlist.append(syn_)
 	    synlist_i.append(syn_)
 	    // if(hostno>=num_ecell){
-	    syn_.e = -100
+	    syn_.e = -40//-100
 	    // }
 	}
     }

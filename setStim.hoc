@@ -45,7 +45,7 @@ proc setStim(){local i, j, stim_num, num_vta, dur, num_cs, stim_int, num_ecell_i
 			    us_tmp.start = stim_start+5+stim_interval*cls//+stim_set_interval*j + 5 + stim_interval*cls
 			    us_tmp.number = stim_num///2//*3/4
 			    us_tmp.interval = stim_int//*2
-			    us_tmp.noise = 0.001
+			    us_tmp.noise = 0.01//0.001
 			    us.append(us_tmp)
 			    nc = new NetCon(us_tmp,pc.gid2cell(i+512).synlist.object(1),0,0.1,0.1)
 			    nclist_us.append(nc)

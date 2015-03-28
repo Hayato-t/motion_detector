@@ -1,0 +1,10 @@
+#!/bin/sh
+
+script="/usr/local/PJM/script/epilogue.sh"
+ret=0
+if [ -f $script ]; then
+    sh $script
+    ret=$?
+fi
+#exit $ret
+exit 0
