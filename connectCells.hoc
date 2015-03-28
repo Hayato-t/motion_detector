@@ -74,7 +74,7 @@ proc connectInputCells() { local i, j, k, l, targid, num_ecell,num_vta, num_cell
                 for k=0, num_ecell-1 {
                     if(con.x[i][k]){
                         syn = pc.gid2cell(i+num_ecell).makeSyn(i+num_ecell,k,num_ecell,num_vta,0,0,0,j,con_order_input.x[i*branch_num+j][counter]/16.0)
-                        nc = pc.gid_connect((con.x[i][j]-1)+k*2+num_cell_full,syn)
+                        nc = pc.gid_connect((con.x[i][k]-1)+k*2+num_cell_full,syn)
                         counter = counter + 1
                         nclist.append(nc)
                         nc.threshold = 0
@@ -202,7 +202,7 @@ proc connectOutput2Cells() { local i, j, k,l, pargid, num_ecell_out2, num_syn, n
     }
 }
 
-proc connectI2O(){local i, j, k, l, num_ecell, num_cell_out1, num_ecell_out1, num_cell_out2, num_ecell_out2, num_vta, num_cell_input, num_cell_full, num_cell_i_o1, branch_num, counter localobj nc, syn
+proc connectI2O(){local i, j, k, l, m, num_ecell, num_cell_out1, num_ecell_out1, num_cell_out2, num_ecell_out2, num_vta, num_cell_input, num_cell_full, num_cell_i_o1, branch_num, counter localobj nc, syn
     num_ecell = $1
     num_cell_out1 = $2
     num_ecell_out1 = $3
@@ -226,21 +226,24 @@ proc connectI2O(){local i, j, k, l, num_ecell, num_cell_out1, num_ecell_out1, nu
             for j=0, num_cell_input-1 {
                 for(k=0;k<con_i2o1.x[i][j%num_ecell];k=k+1){
                     for l=0, branch_num-1 {
-                        syn = pc.gid2cell(i+num_cell_input).makeSyn(i+num_cell_input,j,num_ecell,num_vta,0,0,0,l,con_order_i2o1.x[i*branch_num+l][counter]/82.0)
-                        nc = pc.gid_connect(j*2+1+num_cell_full,syn)
-                        counter = counter + 1 
-                        nclist_i2o.append(nc)
-                        nc.threshold = 0
-                        nc.delay = 0.1
-			if(j<num_ecell){
-                            nc.weight = IO_E*r.uniform(0.3,1)
-			}else{
-			    if(i<num_ecell_out1){
-				nc.weight = IO_I2E
+			for m=0, 3{
+                            syn = pc.gid2cell(i+num_cell_input).makeSyn(i+num_cell_input,j,num_ecell,num_vta,0,0,0,l,con_order_i2o1.x[i*branch_num+l][counter]/82.0)
+                            nc = pc.gid_connect(j*2+1+num_cell_full,syn)
+                            //counter = counter + 1 
+                            nclist_i2o.append(nc)
+                            nc.threshold = 0
+                            nc.delay = 0.1
+			    if(j<num_ecell){
+				nc.weight = IO_E*r.uniform(0.3,1)
 			    }else{
-				nc.weight = IO_I2I
+				if(i<num_ecell_out1){
+				    nc.weight = IO_I2E
+				}else{
+				    nc.weight = IO_I2I
+				}
 			    }
 			}
+			counter = counter + 1 
                         
                     }
                     counter = 0
