@@ -54,17 +54,17 @@ proc connectInputCells() { local i, j, k, l, targid, num_ecell,num_vta, num_cell
             for j=0, branch_num-1 {
                 for k=0, num_cell-1 {
                     if(con.x[i][k%num_ecell]){
-			pc.gid2cell(i).dend[j] {
-                            syn = pc.gid2cell(i).makeSyn(i,k,num_ecell,num_vta,0,0,0,j,con_order_input.x[i*branch_num+j][counter]/16.0)
-                            nc = pc.gid_connect((con.x[i][k%num_ecell]-1)+k*2+num_cell_full,syn)
-                            //counter = counter + 1
-                            //printf("my host id = %d, parent(pre) cell id = %d(e->e)\n",pc.id,k)
-                            nclist.append(nc)
-                            nc.threshold = 0
-                            nc.delay = 0.1
-                            nc.weight = 0.0002
-			}
-			counter = counter + 1
+			//pc.gid2cell(i).dend[j] {
+                        syn = pc.gid2cell(i).makeSyn(i,k,num_ecell,num_vta,0,0,0,j,con_order_input.x[i*branch_num+j][counter]/16.0)
+                        nc = pc.gid_connect((con.x[i][k%num_ecell]-1)+k*2+num_cell_full,syn)
+                        counter = counter + 1
+                        //printf("my host id = %d, parent(pre) cell id = %d(e->e)\n",pc.id,k)
+                        nclist.append(nc)
+                        nc.threshold = 0
+                        nc.delay = 0.1
+                        nc.weight = 0.0002
+			//}
+			//counter = counter + 1
                     }
                 }
                 //printf("counter = %d\n",counter)
@@ -76,16 +76,16 @@ proc connectInputCells() { local i, j, k, l, targid, num_ecell,num_vta, num_cell
             for j=0, branch_num-1 {
                 for k=0, num_ecell-1 {
                     if(con.x[i][k]){
-			pc.gid2cell(i+num_ecell).dend[j] {
-                            syn = pc.gid2cell(i+num_ecell).makeSyn(i+num_ecell,k,num_ecell,num_vta,0,0,0,j,con_order_input.x[i*branch_num+j][counter]/16.0)
-                            nc = pc.gid_connect((con.x[i][k]-1)+k*2+num_cell_full,syn)
-                            //counter = counter + 1
-                            nclist.append(nc)
-                            nc.threshold = 0
-                            nc.delay = 0.1
-                            nc.weight = 0.0002
-			}
-			counter = counter + 1
+			//pc.gid2cell(i+num_ecell).dend[j] {
+                        syn = pc.gid2cell(i+num_ecell).makeSyn(i+num_ecell,k,num_ecell,num_vta,0,0,0,j,con_order_input.x[i*branch_num+j][counter]/16.0)
+                        nc = pc.gid_connect((con.x[i][k]-1)+k*2+num_cell_full,syn)
+                        counter = counter + 1
+                        nclist.append(nc)
+                        nc.threshold = 0
+                        nc.delay = 0.1
+                        nc.weight = 0.0002
+			//}
+			//counter = counter + 1
                     }
                 }
                 counter = 0
@@ -140,23 +140,24 @@ proc connectOutput1Cells() { local i, j, k,l, pargid, num_ecell_out1, num_syn, n
 		for j=0, num_cell_out1-1{
                     for(k=0;k<con_out1.x[i][j];k+=1){
                     
-			pc.gid2cell(i+num_cell_input).dend[l] {
-                            syn = pc.gid2cell(i+num_cell_input).makeSyn(i,j,num_ecell_out1,64,1,num_ecell_out1,num_ecell_out1+int((num_cell_out1-num_ecell_out1)/5),l,con_order_out1.x[i*branch_num+l][counter]/61.0)
-                            nc = pc.gid_connect((j+num_cell_input)*2+1+num_cell_full,syn)
-                            //counter = counter + 1
-                            nclist_out1.append(nc)
-                            nc.threshold = 0
-                            nc.delay = 0.1 
-                            if(j<num_ecell_out1){
-				nc.weight = OUT1_E*r.uniform(0.5,1)
-                            }else{
-				nc.weight = OUT1_I
-                            }
-			}
-			counter = counter + 1
+			//pc.gid2cell(i+num_cell_input).dend[l] {
+                        syn = pc.gid2cell(i+num_cell_input).makeSyn(i,j,num_ecell_out1,64,1,num_ecell_out1,num_ecell_out1+int((num_cell_out1-num_ecell_out1)/5),l,con_order_out1.x[i*branch_num+l][counter]/61.0)
+                        nc = pc.gid_connect((j+num_cell_input)*2+1+num_cell_full,syn)
+                        counter = counter + 1
+                        nclist_out1.append(nc)
+                        nc.threshold = 0
+                        nc.delay = 0.1 
+                        if(j<num_ecell_out1){
+			    nc.weight = OUT1_E*r.uniform(0.5,1)
+                        }else{
+			    nc.weight = OUT1_I
+                        }
+			//}
+			//counter = counter + 1
                     }
-                    counter = 0
+                    //counter = 0
                 }
+		counter = 0 
             }
         }
     }
@@ -237,30 +238,31 @@ proc connectI2O(){local i, j, k, l, m, num_ecell, num_cell_out1, num_ecell_out1,
 		for j=0, num_cell_input-1 {
                     for(k=0;k<con_i2o1.x[i][j%num_ecell];k=k+1){
 			
-			pc.gid2cell(i+num_cell_input).dend[l]{
-			    for m=0, 3{
-				syn = pc.gid2cell(i+num_cell_input).makeSyn(i+num_cell_input,j,num_ecell,num_vta,0,0,0,l,con_order_i2o1.x[i*branch_num+l][counter]/82.0)
-				nc = pc.gid_connect(j*2+1+num_cell_full,syn)
-				//counter = counter + 1 
-				nclist_i2o.append(nc)
-				nc.threshold = 0
-				nc.delay = 0.1
-				if(j<num_ecell){
-				    nc.weight = IO_E*r.uniform(0.3,1)
-				}else{
-				    if(i<num_ecell_out1){
-					nc.weight = IO_I2E
-				    }else{
-					nc.weight = IO_I2I
-				    }
-				}
+			//pc.gid2cell(i+num_cell_input).dend[l]{
+			//for m=0, 1{
+			syn = pc.gid2cell(i+num_cell_input).makeSyn(i+num_cell_input,j,num_ecell,num_vta,0,0,0,l,con_order_i2o1.x[i*branch_num+l][counter]/82.0)
+			nc = pc.gid_connect(j*2+1+num_cell_full,syn)
+			counter = counter + 1 
+			nclist_i2o.append(nc)
+			nc.threshold = -35//0
+			nc.delay = 0.1
+			if(j<num_ecell){
+			    nc.weight = IO_E*r.uniform(0.3,1)
+			}else{
+			    if(i<num_ecell_out1){
+				nc.weight = IO_I2E
+			    }else{
+				nc.weight = IO_I2I
 			    }
 			}
-			counter = counter + 1 
+			//}
+			//}
+			//counter = counter + 1 
                         
                     }
-                    counter = 0
+                    //counter = 0
                 }
+		counter = 0
             }
         }
     }

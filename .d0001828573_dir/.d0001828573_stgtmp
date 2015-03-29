@@ -1,5 +1,0 @@
-CTL 45 /home/e16005/workspace/github/multi_sw2times/ 29 /work/run_multi15.sh.1828573/
-0 stgout 0 - 0 : 1 48 /work/run_multi15.sh.1828573/.d0001828573_stdout 68 /home/e16005/workspace/github/multi_sw2times/run_multi15.sh.o1828573 stgout=update 1 [102]:#PJM --stgout "rank=0 ../.d0001828573_stdout /home/e16005/workspace/github/multi_sw2times/%n.o1828573"
-0 stgout 0 - 0 : 1 48 /work/run_multi15.sh.1828573/.d0001828573_stderr 68 /home/e16005/workspace/github/multi_sw2times/run_multi15.sh.e1828573 stgout=update 1 [102]:#PJM --stgout "rank=0 ../.d0001828573_stderr /home/e16005/workspace/github/multi_sw2times/%n.e1828573"
-0 stgout 0 - 991 : 1 40 /work/run_multi15.sh.1828573/%r/result/* 42 /group/gh16/e16005/0108/result/sw/1828573/ stgout=update 0 [74]:#PJM --stgout "rank=* %r:./result/* /group/gh16/e16005/0108/result/sw/%j/"
-0 stgout 0 - 991 : 1 40 /work/run_multi15.sh.1828573/%r/change/* 42 /group/gh16/e16005/0108/change/sw/1828573/ stgout=update 0 [74]:#PJM --stgout "rank=* %r:./change/* /group/gh16/e16005/0108/change/sw/%j/"
