@@ -325,6 +325,7 @@ proc set_LR(){local i, j
 	for j=0, cells.o(i).synlist_e.count-1{
 	    cells.o(i).synlist_e.o(j).LR = LEARNING_RATE
 	    cells.o(i).synlist_e.o(j).ltd = LTD
+	    cells.o(i).synlist_e.o(j).maxWeight = MAXWEIGHT
 	}
     }
 }

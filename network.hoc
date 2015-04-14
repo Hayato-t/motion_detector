@@ -16,7 +16,7 @@ if(!name_declared("LEARNING_RATE")) { LEARNING_RATE=0.00025 }
 if(!name_declared("OUT1_SPON_I_K")) { OUT1_SPON_I_K=0.12 }
 if(!name_declared("OUT1_SPON_I_T")) { OUT1_SPON_I_T=0.25 }
 if(!name_declared("LTD")) { LTD=1 }
-
+if(!name_declared("MAXWEIGHT")) { MAXWEIGHT=1 }
 v_init = -65
 NCELL = 512//200
 NCELL_E = 256//100 //must be (<NCELL)
@@ -68,13 +68,13 @@ printf("finich make section\n")
 //pc.barrier()
 //initCount()
 connectInputCells(NCELL_E, NCELL_VTA, NCELL, NCELL_FULL,BRANCH_NUM)
-printf("connect input is end \n")
+//printf("connect input is end \n")
 connectOutput1Cells(NCELL_OUT1_E,NCELL_VTA,NCELL_OUT1,NCELL,NCELL_FULL,BRANCH_NUM)
-printf("connect output1 is end \n")
+//printf("connect output1 is end \n")
 connectOutput2Cells(NCELL_OUT2_E,NCELL_VTA,NCELL_OUT2,NCELL+NCELL_OUT1,NCELL_FULL,BRANCH_NUM)
-printf("connect output2 is end \n")
+//printf("connect output2 is end \n")
 connectI2O(NCELL_E,NCELL_OUT1,NCELL_OUT1_E,NCELL_OUT2,NCELL_OUT2_E,NCELL_VTA,NCELL,BRANCH_NUM)
-printf("connect i2o is end \n")
+//printf("connect i2o is end \n")
 // {con.resize(1,1)}
 // {con_out1.resize(1,1)}
 // {con_out2.resize(1,1)}
