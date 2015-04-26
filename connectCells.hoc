@@ -248,7 +248,7 @@ proc connectI2O(){local i, j, k, l, m, num_ecell, num_cell_out1, num_ecell_out1,
 			    counter = counter + 1
 			}
 			nclist_i2o.append(nc)
-			nc.threshold = -35//0
+			nc.threshold = 0//-35//0
 			nc.delay = 0.1
 			if(j<num_ecell){
 			    nc.weight = IO_E*r.uniform(0.3,1)

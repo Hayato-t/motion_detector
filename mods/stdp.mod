@@ -124,6 +124,7 @@ NET_RECEIVE(w (uS), tpre (ms)) {
 	
     } else { : flag == 1 from INITIAL block
 	:printf("else section")
-	WATCH (v > -20) 2
+	:WATCH (v > -20) 2
+	WATCH (v > -30) 2
     }
 }

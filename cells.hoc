@@ -24,7 +24,7 @@ proc init(){local x, y, z, branchNum, i
  
     soma { 
 	L = 30
-	diam = 30
+	diam = 60//30
 	nseg = 5
 	cm = 1
 	
@@ -59,29 +59,37 @@ proc init(){local x, y, z, branchNum, i
     
     dend_parent {
         L = 50
-        diam = 15//9.2//15
+        diam = 30//15//9.2//15
         nseg = 10
         
         pt3dclear()
         pt3dadd(80+x,y,z,diam)
         pt3dadd(30+x,y,z,diam)
-
-        insert pas
-        g_pas = 0.0000666//0.0001666
-        e_pas = -60.0
+	
+	insert hh
+	gnabar_hh = 0.002
+	gkbar_hh = 0
+	
+        // insert pas
+        // g_pas = 0.0000666//0.0001666
+        // e_pas = -60.0
     }
     for i=0, branchNum-1 dend[i] {
         L = 400
-        diam = 3.23//2//2.03
+        diam = 6.46//3.23//2//2.03
         nseg = 82
 
         pt3dclear()
         pt3dadd(-346.4+x,200*cos(i*2*3.1415/branchNum)+y,200*sin(i*2*3.1415/branchNum)+z,diam)
         pt3dadd(80,0,0,diam)
+	
+	insert hh
+	gnabar_hh = 0.002
+	gkbar_hh = 0
 
-        insert pas
-        g_pas = 0.0000666//0.0001666
-        e_pas = -60.0
+        // insert pas
+        // g_pas = 0.0000666//0.0001666
+        // e_pas = -60.0
     }
 
     //the list for accumulating the synapse for injecting the stimuli
