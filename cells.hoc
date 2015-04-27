@@ -15,22 +15,34 @@ proc init(){local x, y, z, branchNum, i
     branchNum = $4
     create soma, axon, dend_parent, dend[branchNum]
     
-    for i=0, branchNum-1{
-        connect dend[i](1), dend_parent(0)
+    // for i=0, branchNum-1{
+    //     connect dend[i](1), dend_parent(0)
+    // }
+    // connect soma(0), dend_parent(1)
+    // connect axon(0), soma(1)
+    
+    axon {
+	//L = 500
+	diam = 0.2
+	nseg = 20
+	
+	pt3dclear()
+        pt3dadd(x,y,z,diam)
+        pt3dadd(500+x,y,z,diam)
+
+	insert hh
     }
-    connect soma(0), dend_parent(1)
-    connect axon(0), soma(1)
-  
+
  
     soma { 
-	L = 30
+	//L = 30
 	diam = 60//30
 	nseg = 5
 	cm = 1
 	
 	pt3dclear()
-        pt3dadd(30+x,y,z,diam)
-        pt3dadd(x,y,z,diam)
+        pt3dadd(500+x,y,z,diam)
+        pt3dadd(530+x,y,z,diam)
 
 	
 	insert GPeA
@@ -45,51 +57,49 @@ proc init(){local x, y, z, branchNum, i
 	el_GPeA = -50//-54.3
 	eca_GPeA = 124
     }
-    axon {
-	L = 500
-	diam = 0.2
-	nseg = 20
-	
-	pt3dclear()
-        pt3dadd(x,y,z,diam)
-        pt3dadd(-500+x,y,z,diam)
-
-	insert hh
-    }
+    
+    connect soma(0), axon(1)
     
     dend_parent {
-        L = 50
+        //L = 50
         diam = 30//15//9.2//15
         nseg = 10
         
         pt3dclear()
-        pt3dadd(80+x,y,z,diam)
-        pt3dadd(30+x,y,z,diam)
+        pt3dadd(530+x,y,z,diam)
+        pt3dadd(580+x,y,z,diam)
 	
-	insert hh
-	gnabar_hh = 0.002
-	gkbar_hh = 0
+	// insert hh
+	// gnabar_hh = 0.002
+	// gkbar_hh = 0
 	
-        // insert pas
-        // g_pas = 0.0000666//0.0001666
-        // e_pas = -60.0
+        insert pas
+        g_pas = 0.0000666//0.0001666
+        e_pas = -65.0
     }
+    connect dend_parent(0), soma(1)
+
     for i=0, branchNum-1 dend[i] {
-        L = 400
+        //L = 400
         diam = 6.46//3.23//2//2.03
         nseg = 82
 
         pt3dclear()
-        pt3dadd(-346.4+x,200*cos(i*2*3.1415/branchNum)+y,200*sin(i*2*3.1415/branchNum)+z,diam)
-        pt3dadd(80,0,0,diam)
+	pt3dadd(580+x,y,z,diam)
+        pt3dadd(846.4+x,200*cos(i*2*3.1415/branchNum)+y,200*sin(i*2*3.1415/branchNum)+z,diam)
+        
 	
-	insert hh
-	gnabar_hh = 0.002
-	gkbar_hh = 0
+	// insert hh
+	// gnabar_hh = 0.002
+	// gkbar_hh = 0
 
-        // insert pas
-        // g_pas = 0.0000666//0.0001666
-        // e_pas = -60.0
+        insert pas
+        g_pas = 0.0000666//0.0001666
+        e_pas = -65.0
+    }
+    
+    for i=0, branchNum-1 {
+	connect dend[i](0), dend_parent(1)
     }
 
     //the list for accumulating the synapse for injecting the stimuli
