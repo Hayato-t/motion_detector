@@ -99,7 +99,7 @@ proc connectInputCells() { local i, j, k, l, targid, num_ecell,num_vta, num_cell
 		nclist.append(nc)
 		nc.threshold = 0
 		nc.delay = 0.1
-		nc.weight = 0.35//0.2
+		nc.weight = 0.3//0.2
 	    //}
         }
         
