@@ -55,7 +55,7 @@ proc connectInputCells() { local i, j, k, l, targid, num_ecell,num_vta, num_cell
                 for k=0, num_cell-1 {
                     if(con.x[i][k%num_ecell]){
 			//pc.gid2cell(i).dend[j] {
-                        syn = pc.gid2cell(i).makeSyn(i,k,num_ecell,num_vta,0,0,0,j,con_order_input.x[i*branch_num+j][counter]/16.0)
+                        syn = pc.gid2cell(i).makeSyn(i,k,num_ecell,num_vta,0,0,0,j,0.25+0.5*con_order_input.x[i*branch_num+j][counter]/16.0)
                         nc = pc.gid_connect((con.x[i][k%num_ecell]-1)+k*2+num_cell_full,syn)
                         counter = counter + 1
                         //printf("my host id = %d, parent(pre) cell id = %d(e->e)\n",pc.id,k)
@@ -77,7 +77,7 @@ proc connectInputCells() { local i, j, k, l, targid, num_ecell,num_vta, num_cell
                 for k=0, num_ecell-1 {
                     if(con.x[i][k]){
 			//pc.gid2cell(i+num_ecell).dend[j] {
-                        syn = pc.gid2cell(i+num_ecell).makeSyn(i+num_ecell,k,num_ecell,num_vta,0,0,0,j,con_order_input.x[i*branch_num+j][counter]/16.0)
+                        syn = pc.gid2cell(i+num_ecell).makeSyn(i+num_ecell,k,num_ecell,num_vta,0,0,0,j,0.25+0.5*con_order_input.x[i*branch_num+j][counter]/16.0)
                         nc = pc.gid_connect((con.x[i][k]-1)+k*2+num_cell_full,syn)
                         counter = counter + 1
                         nclist.append(nc)
@@ -141,7 +141,7 @@ proc connectOutput1Cells() { local i, j, k,l, pargid, num_ecell_out1, num_syn, n
                     for(k=0;k<con_out1.x[i][j];k+=1){
                     
 			//pc.gid2cell(i+num_cell_input).dend[l] {
-                        syn = pc.gid2cell(i+num_cell_input).makeSyn(i,j,num_ecell_out1,64,1,num_ecell_out1,num_ecell_out1+int((num_cell_out1-num_ecell_out1)/5),l,con_order_out1.x[i*branch_num+l][counter]/61.0)
+                        syn = pc.gid2cell(i+num_cell_input).makeSyn(i,j,num_ecell_out1,64,1,num_ecell_out1,num_ecell_out1+int((num_cell_out1-num_ecell_out1)/5),l,0.25+0.5*con_order_out1.x[i*branch_num+l][counter]/61.0)
                         nc = pc.gid_connect((j+num_cell_input)*2+1+num_cell_full,syn)
                         if(counter<60){
 			    counter = counter + 1
@@ -194,7 +194,7 @@ proc connectOutput2Cells() { local i, j, k,l, pargid, num_ecell_out2, num_syn, n
                 for(k=0;k<con_out2.x[i][j];k=k+1){
                     //for l=0, branch_num-1 {
 		    l = 0
-                        syn = pc.gid2cell(i+num_cell_i_o1).makeSyn(i,j,num_ecell_out2,int(num_ecell_out2/4),1,num_ecell_out2,num_ecell_out2+int((num_cell_out2-num_ecell_out2)/4),l,con_order_out2.x[i*branch_num+l][counter]/19.0)
+                        syn = pc.gid2cell(i+num_cell_i_o1).makeSyn(i,j,num_ecell_out2,int(num_ecell_out2/4),1,num_ecell_out2,num_ecell_out2+int((num_cell_out2-num_ecell_out2)/4),l,0.25+0.5*con_order_out2.x[i*branch_num+l][counter]/19.0)
                         nc = pc.gid_connect((j+num_cell_i_o1)*2+1+num_cell_full,syn)
                         counter = counter + 1
                         nclist_out2.append(nc)
@@ -242,7 +242,7 @@ proc connectI2O(){local i, j, k, l, m, num_ecell, num_cell_out1, num_ecell_out1,
 			
 			//pc.gid2cell(i+num_cell_input).dend[l]{
 			//for m=0, 1{
-			syn = pc.gid2cell(i+num_cell_input).makeSyn(i+num_cell_input,j,num_ecell,num_vta,0,0,0,l,con_order_i2o1.x[i*branch_num+l][counter]/82.0)
+			syn = pc.gid2cell(i+num_cell_input).makeSyn(i+num_cell_input,j,num_ecell,num_vta,0,0,0,l,0.25+0.5*con_order_i2o1.x[i*branch_num+l][counter]/82.0)
 			nc = pc.gid_connect(j*2+1+num_cell_full,syn)
 			if(counter<81){
 			    counter = counter + 1
@@ -326,6 +326,19 @@ proc set_LR(){local i, j
 	    cells.o(i).synlist_e.o(j).LR = LEARNING_RATE
 	    cells.o(i).synlist_e.o(j).ltd = LTD
 	    cells.o(i).synlist_e.o(j).maxWeight = MAXWEIGHT
+	}
+    }
+}
+
+proc set_LR_Separate(){local i, j, start_cell, end_cell
+    start_cell = $1
+    end_cell = $2
+    forTest = 0.0001
+    for i=start_cell, end_cell{
+	if(pc.gid_exists(i)){
+	    for j=0, pc.gid2cell(i).synlist_e.count-1 {
+		pc.gid2cell(i).synlist_e.o(j).LR = forTest
+	    }
 	}
     }
 }

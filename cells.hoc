@@ -82,7 +82,7 @@ proc init(){local x, y, z, branchNum, i
     for i=0, branchNum-1 dend[i] {
         //L = 400
         diam = 6.46//3.23//2//2.03
-        nseg = 82
+        nseg = 164//82
 
         pt3dclear()
 	pt3dadd(580+x,y,z,diam)
@@ -181,7 +181,7 @@ obfunc makeSyn() {local targetno, hostno, num_ecell, num_vta, rw_flag, start_i, 
 	    //synlist.append(syn_)
 	    synlist_i.append(syn_)
 	    // if(hostno>=num_ecell){
-	    syn_.e = -100//-40//-100
+	    syn_.e = -45//-100//-40//-100
 	    // }
 	}
     }
@@ -230,6 +230,7 @@ proc makeCells(){local i, num_cell localobj cell, nc, nil
 	pc.set_gid2node(i,pc.id)
 	nc = cell.connect2target(nil)
 	nc.weight = 1
+	//nc.threshold = -10
 	pc.cell(i,nc)
     }
 }
