@@ -148,7 +148,12 @@ proc connectOutput1Cells() { local i, j, k,l, pargid, num_ecell_out1, num_syn, n
 			}
                         nclist_out1.append(nc)
                         nc.threshold = 0
-                        nc.delay = 0.1 
+			if(i<num_ecell_out1){
+                            nc.delay = 2
+			}else{
+			    nc.delay = 0.1
+			}
+
                         if(j<num_ecell_out1){
 			    nc.weight = OUT1_E*r.uniform(0.5,1)
                         }else{
@@ -251,7 +256,7 @@ proc connectI2O(){local i, j, k, l, m, num_ecell, num_cell_out1, num_ecell_out1,
 			nc.threshold = 0//-35//0
 			nc.delay = 0.1
 			if(j<num_ecell){
-			    nc.weight = IO_E*r.uniform(0.3,1)
+			    nc.weight = IO_E//*r.uniform(0.3,1)
 			}else{
 			    if(i<num_ecell_out1){
 				nc.weight = IO_I2E
