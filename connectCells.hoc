@@ -148,12 +148,7 @@ proc connectOutput1Cells() { local i, j, k,l, pargid, num_ecell_out1, num_syn, n
 			}
                         nclist_out1.append(nc)
                         nc.threshold = 0
-			if(i<num_ecell_out1){
-                            nc.delay = 2
-			}else{
-			    nc.delay = 0.1
-			}
-
+			nc.delay = 0.1
                         if(j<num_ecell_out1){
 			    nc.weight = OUT1_E*r.uniform(0.5,1)
                         }else{
