@@ -44,7 +44,7 @@ NRNOPT=\
 " -c OUT1_SPON_I_T=0.3"\
 " -c LTD=1.2"\
 " -c MAXWEIGHT=1"
-
+#bad setting LR and LTD balance
 
 LPG="lpgparm -t 4MB -s 4MB -d 4MB -p 4MB"
 MPIEXEC="mpiexec -mca mpi_print_stats 1"
