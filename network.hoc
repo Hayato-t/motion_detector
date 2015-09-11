@@ -1,6 +1,3 @@
-//the next case problem
-//add the DA-signaling section from plusDA
-
 load_file("nrngui.hoc")
 //load cell template
 //setting
@@ -20,8 +17,8 @@ if(!name_declared("MAXWEIGHT")) { MAXWEIGHT=1 }
 // if(!name_declared("LR_INPUT")){ LR_INPUT=0.0001 }
 // if(!name_declared("LR_OUT")){ LR_OUT=0.0001 }
 v_init = -65
-NCELL = 512//200
-NCELL_E = 256//100 //must be (<NCELL)
+NCELL = 512
+NCELL_E = 256 //must be (<NCELL)
 NCELL_OUT1 = 400
 NCELL_OUT1_E = 320
 NCELL_OUT2 = 100 //this number should be considered more
@@ -32,19 +29,23 @@ NSYN = 10
 NSYN_MAX = (NCELL-1)*NSYN
 
 NCELL_FULL = NCELL + NCELL_OUT1 + NCELL_OUT2
+SECTION_OUT1_E = int(NCELL_OUT1_E/5)
+SECTION_OUT1_I = int((NCELL_OUT1-NCELL_OUT1_E)/5)
+SECTION_OUT2_E = int(NCELL_OUT2_E/4)
+SECTION_OUT2_I = int((NCELL_OUT2-NCELL_OUT2_E)/4)
 
 BRANCH_NUM = 10
 
-LEARNING_TIMES = 6//3//2//1//2//30
-STIM_DUR = 1000//10000//75000//5000//390000//230000//200000//75000//140000//75000<-55m//100000//25000//2000//5//30 //until now(12/20), here is not changed, so it may cause the learning unproceeding??
+LEARNING_TIMES = 6
+STIM_DUR = 1000
 STIM_DUR_MOVE = 1000000
 START_STIM = 20
 
-dt = 0.025//<-for test0.1//0.025
-tstop_max = 35000//30000//15000//10000//75000//5000//390000//230000//200000//75000//140000//75000//25000//15000//30//20//3000//1000//200//1000//200//tstop = dt*10//10//200//500//100000
+dt = 0.025
+tstop_max = 35000
 t = 0
-stimInt = 30//from18//25//30//25//50//30//should be less than 40Hz ??//<-learn7 66//<-learn2 learn1->//40//66//40//20//1000
-stimNum = 30//36//30//36//76//80//600//1600//1540//650//450//200//100//100//7//50//7//int(tstop/stimInt)
+stimInt = 30
+stimNum = 30
 
 startTest = STIM_DUR*5*LEARNING_TIMES+500
 
@@ -66,22 +67,10 @@ makeCells(NCELL_FULL,BRANCH_NUM)
 makeConvert(NCELL_FULL)
 pc.barrier()
 printf("finich make section\n")
-//checkgid()
-//pc.barrier()
-//initCount()
 connectInputCells(NCELL_E, NCELL_VTA, NCELL, NCELL_FULL,BRANCH_NUM)
-//printf("connect input is end \n")
 connectOutput1Cells(NCELL_OUT1_E,NCELL_VTA,NCELL_OUT1,NCELL,NCELL_FULL,BRANCH_NUM)
-//printf("connect output1 is end \n")
 connectOutput2Cells(NCELL_OUT2_E,NCELL_VTA,NCELL_OUT2,NCELL+NCELL_OUT1,NCELL_FULL,BRANCH_NUM)
-//printf("connect output2 is end \n")
 connectI2O(NCELL_E,NCELL_OUT1,NCELL_OUT1_E,NCELL_OUT2,NCELL_OUT2_E,NCELL_VTA,NCELL,BRANCH_NUM)
-//printf("connect i2o is end \n")
-// {con.resize(1,1)}
-// {con_out1.resize(1,1)}
-// {con_out2.resize(1,1)}
-// {con_i2o1.resize(1,1)}
-// {con_i2o2.resize(1,1)}
 
 {con_order_input.resize(1,1)}
 {con_order_out1.resize(1,1)}
@@ -90,7 +79,6 @@ connectI2O(NCELL_E,NCELL_OUT1,NCELL_OUT1_E,NCELL_OUT2,NCELL_OUT2_E,NCELL_VTA,NCE
 {con_order_i2o2.resize(1,1)}
 
 
-//confirm.printf("%0.5f ")
 pc.barrier()
 /*
 read_weight(nclist.count,nclist_out1.count,nclist_out2.count,nclist_i2o.count)
@@ -105,7 +93,7 @@ pc.barrier()
 printf("finish connect section\n")
 
 
-setStim(stimNum, NCELL_VTA, dur, NCELL_CS,stimInt,NCELL_E,LEARNING_TIMES,START_STIM,NCELL_FULL)
+setStim(stimNum, NCELL_VTA, dur, NCELL_CS,stimInt,NCELL_E,LEARNING_TIMES,START_STIM,NCELL_FULL,NCELL_OUT1,NCELL_OUT2,NCELL_OUT1_E,NCELL_OUT2_E,NCELL,SECTION_OUT1_E,SECTION_OUT1_I,SECTION_OUT2_E,SECTION_OUT2_I)
 
 objref tvec, idvec
 
@@ -133,8 +121,6 @@ proc spikerecord2(){local i
 
 spikerecord2()
 
-//setSpikeRecord()
-
 /////////////////for record and watching section///////////////////////
 
 //load_file("graph.ses")
@@ -152,15 +138,7 @@ recv.record(&cells.object(8).soma.v(0.5))//previously monitor 82
 ////////////////continue to save section///////////////////////////////
 finitialize(v_init)
 fcurrent()
-//signalDA(NCELL_VTA, NCELL_E, NSYN_MAX)
 printf("the first DA = %lf\n",cells.object(0).synlist_e.object(0).forDA)
-///////////////execute section///////////////////////////////////////
-//run()
-//myrun()
-/////////////end execute section//////////////////////////////////////
-
-
-
 
 
 pc.set_maxstep(10)
@@ -172,11 +150,7 @@ stim_timer_move = STIM_DUR_MOVE
 stim_flag = 0
 stim_flag_move = 0
 stim_counter=0
-SECTION_OUT1_E = int(NCELL_OUT1_E/5)
-SECTION_OUT1_I = int((NCELL_OUT1-NCELL_OUT1_E)/5)
-SECTION_OUT2_E = int(NCELL_OUT2_E/4)
-SECTION_OUT2_I = int((NCELL_OUT2-NCELL_OUT2_E)/4)
-datiming = 2.5//2.5//1//2//1
+datiming = 2.5
 
 changeFlags1(0,64,320,336,400,100,512,320,80)
 changeFlags2(0,20,80,85,400,100,512,320,80)
@@ -193,25 +167,10 @@ init_interval=STIM_DUR
 print_time = 1000
 
 for(time=0;time<tstop_max;time+=datiming){
-    //printf("\n\n\nt = %lf \n\n\n",t)
-    /*if(time>=tstop_max-dt){
-	printf("\n\n\nt=%lf\n\n\n",t)
-    }*/
     pc.psolve(time+datiming)
     pc.barrier()
-    //tstop += steptime
-    //if(time>=datiming){
     signalDA(NCELL_VTA,NCELL_E,NSYN_MAX,NCELL_FULL,NCELL,NCELL_OUT1,NCELL_OUT2,NCELL_OUT1_E,NCELL_OUT2_E)
-	//datiming = datiming + 1//2//5//1
-    //}
-    /*if(time==1 || time==5000 || time==10000 || time == 15000 || time==20000){
-	for conf=0, 4 {
-	    if(pc.gid_exists(512+conf*12)){
-		printf("flags is %d \n",pc.gid2cell(512+conf*12).synlist_e.o(0).forSpike)
-	    }
-	}
-    }*/
-    //koko kakinaosita kara moshiumakuikanakunattara koko (from == -> >=)
+
     if(time>=init_time){
 	init_time += init_interval
 	initDA()
@@ -253,12 +212,6 @@ for(time=0;time<tstop_max;time+=datiming){
     
     if(time>=stim_timer){
 	stim_timer += STIM_DUR
-	/*
-	if(stim_flag==4){
-	    stim_flag = 0
-	}else{
-	    stim_flag = stim_flag + 1
-	}*/
 	stim_counter += 1
 	if(stim_counter<=stim_order.size-1){
             stim_flag = stim_order.x(stim_counter)
@@ -275,22 +228,6 @@ for(time=0;time<tstop_max;time+=datiming){
 	}
 	changeFlags2(0+SECTION_OUT2_E*stim_flag_move,20+SECTION_OUT2_E*stim_flag_move,80+SECTION_OUT2_I*stim_flag_move,85+SECTION_OUT2_I*stim_flag_move,400,100,512,320,80)
     }
-    
-    //test for change flags in stdp.mod
-    //and test for broadcast the DA value
-    /*
-    if(time==10){
-	changeFlags1(64,128,336,352,400,100,512,320,80)
-	changeFlags2(20,40,85,90,400,100,512,320,80)
-	changeDATest()
-    }
-    */
-    //pc.barrier()
-    /*
-    if(tstop>=tstop_max){
-	break
-    }
-    */
 }
 
 pc.barrier()
@@ -312,27 +249,6 @@ for rank=0, pc.nhost-1{
     }
     pc.barrier()
 }
-*/
-/*
-objref sav_connect
-sav_connect = new File()
-sav_connect.wopen("connect.dat")
-for i=0, cells.count-1 {
-    for j=0, NSYN-1 {
-	sav_connect.printf("%g\t%g\n",int(rec_connect[i][j]),nclist.object(i*NSYN+j).weight)
-    }
-    sav_connect.printf("\n")
-}
-sav_connect.close()
-*/
-/*
-objref mt
-{mt = new Matrix()}
-{printf("#  t (msec)\tIClamp\n")}
-{mt.resize(tvec.size(), 2)}
-{mt.setcol(0, tvec)}
-{mt.setcol(1, idvec)}
-{mt.printf("%0.5f ")}
 */
 printf("the last da = %lf\n",cells.object(0).synlist_e.object(0).forDA)
 
@@ -466,10 +382,8 @@ gettingtime = startsw() - gettingtime
 printf("the time elapse for write weights file is %lf \n",gettingtime)
 	
 
-//savSpike.close()
 {pc.runworker()}
 {pc.done()}
 
 /////////////end of save section///////////////////////////////////
 
-//comment out signalDA and savWeight section

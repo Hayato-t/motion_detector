@@ -20,11 +20,10 @@ proc checkgid() {local i, exist
 	if(exist){
 	    printf("cell %d exists!!\n",i)
 	}
-	//printf("%dth result is %d\n",i,exist)
     }
 }
 
-//objref confirm
+
 
 
 proc connectInputCells() { local i, j, k, l, targid, num_ecell,num_vta, num_cell, num_cell_full, branch_num, counter localobj src, target, syn, nc, nil
@@ -38,17 +37,7 @@ proc connectInputCells() { local i, j, k, l, targid, num_ecell,num_vta, num_cell
     counter = 0
 
     num_vta = 0
-/*    
-    confirm = new Matrix()
-    confirm.resize(NCELL,NCELL)
-    for i=0,NCELL-1{
-	for j=0,NCELL-1{
-	    confirm.x[i][j]=0
-	}
-    }
-    
-    */
-    mem = -1
+
      for i=0, num_ecell-1{
         if(pc.gid_exists(i)){
             for j=0, branch_num-1 {
@@ -58,16 +47,13 @@ proc connectInputCells() { local i, j, k, l, targid, num_ecell,num_vta, num_cell
                         syn = pc.gid2cell(i).makeSyn(i,k,num_ecell,num_vta,0,0,0,j,0.25+0.5*con_order_input.x[i*branch_num+j][counter]/16.0)
                         nc = pc.gid_connect((con.x[i][k%num_ecell]-1)+k*2+num_cell_full,syn)
                         counter = counter + 1
-                        //printf("my host id = %d, parent(pre) cell id = %d(e->e)\n",pc.id,k)
                         nclist.append(nc)
                         nc.threshold = 0
                         nc.delay = 0.1
                         nc.weight = 0.0002
 			//}
-			//counter = counter + 1
-                    }
+		    }
                 }
-                //printf("counter = %d\n",counter)
                 counter = 0
             }
         }
@@ -85,8 +71,7 @@ proc connectInputCells() { local i, j, k, l, targid, num_ecell,num_vta, num_cell
                         nc.delay = 0.1
                         nc.weight = 0.0002
 			//}
-			//counter = counter + 1
-                    }
+		    }
                 }
                 counter = 0
             }
@@ -99,7 +84,7 @@ proc connectInputCells() { local i, j, k, l, targid, num_ecell,num_vta, num_cell
 		nclist.append(nc)
 		nc.threshold = 0
 		nc.delay = 0.1
-		nc.weight = 0.3//0.2
+		nc.weight = 0.3
 	    //}
         }
         
@@ -107,9 +92,6 @@ proc connectInputCells() { local i, j, k, l, targid, num_ecell,num_vta, num_cell
 
 }
 
-/////////////////////////////////////////////////////////TODO////////////////////////////////////////////////////////////////
-//shold be modified to the manner from the single compartment to the double compartmentmodel////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 proc connectOutput1Cells() { local i, j, k,l, pargid, num_ecell_out1, num_syn, num_vta, num_cell_out1, num_cell_input, num_cell_full, cellid, branch_num, counter localobj src, target, syn, nc, nil
     num_ecell_out1 = $1
@@ -121,17 +103,7 @@ proc connectOutput1Cells() { local i, j, k,l, pargid, num_ecell_out1, num_syn, n
     nclist_out1 = new List()
     r = new Random(25525)
     counter = 0
-/*    
-    confirm = new Matrix()
-    confirm.resize(NCELL,NCELL)
-    for i=0,NCELL-1{
-	for j=0,NCELL-1{
-	    confirm.x[i][j]=0
-	}
-    }
     
-    */
-    mem = -1
     
     
     for i=0, num_cell_out1-1 {
@@ -155,9 +127,7 @@ proc connectOutput1Cells() { local i, j, k,l, pargid, num_ecell_out1, num_syn, n
 			    nc.weight = OUT1_I
                         }
 			//}
-			//counter = counter + 1
-                    }
-                    //counter = 0
+		    }
                 }
 		counter = 0 
             }
@@ -176,17 +146,6 @@ proc connectOutput2Cells() { local i, j, k,l, pargid, num_ecell_out2, num_syn, n
     nclist_out2 = new List()
     r = new Random(25525)
     counter = 0
-/*    
-    confirm = new Matrix()
-    confirm.resize(NCELL,NCELL)
-    for i=0,NCELL-1{
-	for j=0,NCELL-1{
-	    confirm.x[i][j]=0
-	}
-    }
-    
-    */
-    mem = -1
     
     for i=0, num_cell_out2-1{
         if(pc.gid_exists(i+num_cell_i_o1)){

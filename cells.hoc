@@ -15,12 +15,6 @@ proc init(){local x, y, z, branchNum, i
     branchNum = $4
     create soma, axon, dend_parent, dend[branchNum]
     
-    // for i=0, branchNum-1{
-    //     connect dend[i](1), dend_parent(0)
-    // }
-    // connect soma(0), dend_parent(1)
-    // connect axon(0), soma(1)
-    
     axon {
 	//L = 500
 	diam = 0.2
@@ -69,10 +63,6 @@ proc init(){local x, y, z, branchNum, i
         pt3dadd(530+x,y,z,diam)
         pt3dadd(580+x,y,z,diam)
 	
-	// insert hh
-	// gnabar_hh = 0.002
-	// gkbar_hh = 0
-	
         insert pas
         g_pas = 0.0000666//0.0001666
         e_pas = -65.0
@@ -87,11 +77,6 @@ proc init(){local x, y, z, branchNum, i
         pt3dclear()
 	pt3dadd(580+x,y,z,diam)
         pt3dadd(846.4+x,200*cos(i*2*3.1415/branchNum)+y,200*sin(i*2*3.1415/branchNum)+z,diam)
-        
-	
-	// insert hh
-	// gnabar_hh = 0.002
-	// gkbar_hh = 0
 
         insert pas
         g_pas = 0.0000666//0.0001666
@@ -159,30 +144,19 @@ obfunc makeSyn() {local targetno, hostno, num_ecell, num_vta, rw_flag, start_i, 
     if(hostno<num_ecell){
 	dend[which_dend] {
 	    syn_ = new ExpSynSTDP(where_dend)
-	    //synlist.append(syn_)
 	    synlist_e.append(syn_)
 	}
 	//num_vta means the initial vtap points...
 	if(rw_flag){
 	    if(targetno<num_vta || (targetno>=start_i && targetno<end_i)){
-		
-		//if(targetno>=start_i && targetno<end_i){
-		    //printf("targetno = %d, vta = %d, start = %d, end = %d\n",targetno,num_vta,start_i,end_i)
-		//}
 		syn_.forSpike = 2
 	    }
-	}/*
-	if(hostno>=num_ecell){
-	    syn_.e=-100
-	}*/
+	}
     }else{
 	dend[which_dend] {
 	    syn_ = new Exp2Syn(where_dend)
-	    //synlist.append(syn_)
 	    synlist_i.append(syn_)
-	    // if(hostno>=num_ecell){
-	    syn_.e = -45//-100//-40//-100
-	    // }
+	    syn_.e = -45//-100
 	}
     }
     return syn_
@@ -224,7 +198,6 @@ proc makeCells(){local i, num_cell localobj cell, nc, nil
    
     for (i=pc.id; i<num_cell; i = i + pc.nhost) {
 
-	//cell = new HHneuron(160*int(i/10),20*(i%10),0)
 	cell = new HHneuron(1200*(i%10),400*int(i/10),0,branch_num)
 	cells.append(cell)
 	pc.set_gid2node(i,pc.id)
