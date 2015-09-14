@@ -87,6 +87,9 @@ subst()
 pc.barrier()
 */
 set_LR()
+set_LR_Separate(NCELL+SECTION_OUT1_E*2,NCELL+SECTION_OUT1_E*3)
+set_LR_Separate(NCELL+SECTION_OUT1_E*4,NCELL+NCELL_OUT1)
+
 
 pc.barrier()
 
