@@ -130,10 +130,6 @@ BREAKPOINT {
     SOLVE states METHOD cnexp
     
     T = 273 + celsius - 9.5
-    :ena = -(R*T)/FARADAY*log(nai/nao)*1000
-    :ek = (R*T)/FARADAY*log(ko/ki)*1000
-    :eca = -(R*T)/FARADAY*log(cai/cao)*1000/2
-    
     ina = gnabar * m_inf*m_inf*m_inf*(1-W) * (v - ena)
    
     ikD = gkdrbar * (W/sigma)^4 * (v - ek)
@@ -166,67 +162,19 @@ INITIAL {
 }
 
 PROCEDURE evaluate_fct(v(mV)) {     
-    VERBATIM
-    if(v>400){
-	/*printf("too high v is investigated!!\n");
-	/*printf("time is %lf, v = %lf\n",t,v);*/
-	/*printf("too large v (v= %lf) is detected at t=%lf\n",v,t);*/
-	/*sleep(1);*/
-	/*printf("before v = %lf\n",v);*/
-	/*v = -65;*/
-	/*printf("after v = %lf \n",v);*/
-    }else if(v<-250){
-	/*printf("too small v (v= %lf) is detected at t = %lf\n",v,t);*/
-	/*v = -65;*/
-    }
-    ENDVERBATIM
-    :if((-2*a_m*(v-v_m))>700){
-	:printf("here(m)  is the stopping point!!\n t = %g, v = %g(mV)\n",t,v)
-:	m_inf = 1/(1+exp(700))
-:    }else{
-	m_inf = 1/(1+exp(-2*a_m*(v-v_m)))
-:    }
-:    if((-2*a_W*(v-v_W))>700){
-:	printf("here(W)  is the stopping point!!\n t = %g, v = %g(mV)\n",t,v)
-:	W_inf = 1/(1+exp(700))
-:    }else{
-	W_inf = 1/(1+exp(-2*a_W*(v-v_W)))
-:    }
-:    if(a_W*(v-v_W)>700){
-	:	printf("tau is strange!!\n t = %g, v = %g\n",t,v)
-:	tau_W = 1/(lambda*(exp(700)+exp(-a_W*(v-v_W))))
-:    }else if(a_W*(v-v_W)<-700){
-:	tau_W = 1/(lambda*(exp(a_W*(v-v_W))+exp(700)))
-:    }else{
-	tau_W = 1/(lambda*(exp(a_W*(v-v_W))+exp(-a_W*(v-v_W))))
-:    }
-   
+    m_inf = 1/(1+exp(-2*a_m*(v-v_m)))
+    W_inf = 1/(1+exp(-2*a_W*(v-v_W)))
+    tau_W = 1/(lambda*(exp(a_W*(v-v_W))+exp(-a_W*(v-v_W))))
+    X_inf = 1/(1+exp(-2*a_X*(v-v_X)))
     
-:    if((-2*a_X*(v-v_X))>700){
-:	printf("here(X)  is the stopping point!!\n t = %g, v = %g(mV)\n",t,v)
-:	X_inf = 1/(1+exp(700))
-:    }else{
-	X_inf = 1/(1+exp(-2*a_X*(v-v_X)))
-:    }
     if((Csk-C_gamma)<0.00001){
 	Csk = C_gamma + 0.00001 :avoid that the argument in the log function is below 0
     }
     
     q_inf = 1/(1+exp(-1.120-2.508*log((Csk-C_gamma)/50)))
     
-:    if((-2*a_A*(v-v_A))>700){
-:	printf("here(A)  is the stopping point!!\n t = %g, v = %g(mV)\n",t,v)
-:	A_inf = 1/(1+exp(700))
-:    }else{
-	A_inf = 1/(1+exp(-2*a_A*(v-v_A)))
-:    }
-:   if((-2*a_B*(v-v_B))>700){
-:	printf("here(B)  is the stopping point!!\n t = %g, v = %g(mV)\n",t,v)
-:	B_inf = 1/(1+exp(700))
-:    }else{
-	B_inf = 1/(1+exp(-2*a_B*(v-v_B)))
-:    }
-    :printf("log(10) = %g\n",log(10))
+    A_inf = 1/(1+exp(-2*a_A*(v-v_A)))
+    B_inf = 1/(1+exp(-2*a_B*(v-v_B)))
 }
 
 UNITSON
