@@ -9,7 +9,7 @@ load_file("nrngui.hoc")
 objref nclist_us, nclist_spon, nclist_cs
 objref  us, cs, sponFire
 
-proc setStim(){local i, j, stim_num, num_vta, dur, num_cs, stim_int, num_ecell_input, num_cell_input, num_cell_out1, num_ecell_out1, num_cell_out2, num_ecell_out2, num_cell_input, section_out1_e, section_out1_i, section_out2_e, section_out2_i, l_times, stim_dur, stim_start, stim_set_interval, stim_interval, cls localobj nc, us_tmp, cs_tmp, spon_tmp
+proc setStim(){local i, j, stim_num, num_vta, dur, num_cs, stim_int, num_ecell_input, num_cell_input, num_cell_out1, num_ecell_out1, num_cell_out2, num_ecell_out2, section_out1_e, section_out1_i, section_out2_e, section_out2_i, l_times, stim_dur, stim_start, stim_set_interval, stim_interval, cls localobj nc, us_tmp, cs_tmp, spon_tmp
     
     stim_num = $1 
     num_vta = $2
@@ -30,8 +30,6 @@ proc setStim(){local i, j, stim_num, num_vta, dur, num_cs, stim_int, num_ecell_i
     section_out2_e = $17
     section_out2_i = $18
     
-    printf("stim_num = %d\n",stim_num)
-
     stim_dur = stimInt*stimNum
     stim_set_interval = (stim_dur + 100) * 5
     stim_interval = stim_dur + 100
