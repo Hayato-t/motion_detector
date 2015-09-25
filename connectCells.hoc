@@ -293,12 +293,13 @@ proc set_LR(){local i, j
     }
 }
 
-proc set_LR_Separate(){local i, j, start_cell, end_cell, specialLR
+proc set_LR_Separate(){local i, j, start_cell, end_cell, specialLR, ratio
     start_cell = $1
     end_cell = $2
+    ratio = $3
     
     //specialLR = LEARNING_RATE*1.5
-    specialLR = LEARNING_RATE*1.8
+    specialLR = LEARNING_RATE*ratio
 
     for i=start_cell, end_cell{
 	if(pc.gid_exists(i)){
@@ -308,6 +309,39 @@ proc set_LR_Separate(){local i, j, start_cell, end_cell, specialLR
 	}
     }
 }
+
+proc set_LR_Separate2(){local i, j, start_cell, end_cell, specialLR, ratio, section_e, section_i, offset, section_num, class_num
+    offset = $1
+    section_e = $2
+    section_i = $3
+    ratio = $4
+    section_num = $5
+    class_num = $6
+
+    specialLR = LEARNING_RATE * ratio
+    
+    start_cell = offset + section_e * (section_num - 1)
+    end_cell = offset + section_e * section_num
+    for i=start_cell, end_cell{
+	if(pc.gid_exists(i)){
+	    for j=0, pc.gid2cell(i).synlist_e.count - 1 {
+		pc.gid2cell(i).synlist_e.o(j).LR = specialLR
+	    }
+	}
+    }
+    
+    start_cell = offset + section_e * class_num + section_i * (section_num - 1)
+    end_cell = offset + section_e * class_num + section_i * section_num
+    
+    for i=start_cell, end_cell{
+	if(pc.gid_exists(i)){
+	    for j=0, pc.gid2cell(i).synlist_e.count - 1 {
+		pc.gid2cell(i).synlist_e.o(j).LR = specialLR
+	    }
+	}
+    }
+}
+
 
 proc saturation_weight(){local i, j, normal, sum, multiple, inhib_io_ave
     normal = $1

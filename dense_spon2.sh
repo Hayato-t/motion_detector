@@ -36,12 +36,12 @@ NRNOPT=\
 " -c IO_E=0.001"\
 " -c IO_I2E=0.0004"\
 " -c IO_I2I=0.00015"\
-" -c OUT1_SPON_E_K=0.25"\
-" -c OUT1_SPON_E_T=0.35"\
+" -c OUT1_SPON_E_K=0.5"\
+" -c OUT1_SPON_E_T=0.65"\
 " -c DOPAMINE=0.01"\
 " -c LEARNING_RATE=0.000065"\
-" -c OUT1_SPON_I_K=0.25"\
-" -c OUT1_SPON_I_T=0.35"\
+" -c OUT1_SPON_I_K=0.35"\
+" -c OUT1_SPON_I_T=0.45"\
 " -c LTD=1.1"\
 " -c MAXWEIGHT=1"
 
