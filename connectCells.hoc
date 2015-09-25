@@ -50,7 +50,11 @@ proc connectInputCells() { local i, j, k, l, targid, num_ecell,num_vta, num_cell
                         nclist.append(nc)
                         nc.threshold = 0
                         nc.delay = 0.1
-                        nc.weight = 0.0002
+			if(k<num_ecell){
+                            nc.weight = 0.0002
+			}else{
+			    nc.weight = 0.001
+			}
 			//}
 		    }
                 }
@@ -303,4 +307,48 @@ proc set_LR_Separate(){local i, j, start_cell, end_cell, specialLR
 	    }
 	}
     }
+}
+
+proc saturation_weight(){local i, j, normal, sum, multiple, inhib_io_ave
+    normal = $1
+    sum = 0.0
+    comp = 0.0
+
+    
+    for i=0, nclist.count-1 {
+	sum = sum + nclist.o(i).weight - 0.001
+    }
+    
+    for i=0, nclist_out1.count-1 {
+	sum = sum + nclist_out1.o(i).weight - OUT1_I
+    }
+    
+    for i=0, nclist_out2.count-1 {
+	sum = sum + nclist_out2.o(i).weight - OUT1_I
+    }
+    
+    for i=0, nclist_i2o.count-1 {
+	sum = sum + nclist_i2o.o(i).weight - IO_I2I
+    }
+    
+    multiple = normal/sum
+    
+    for i=0, nclist.count-1 {
+	nclist.o(i).weight = (nclist.o(i).weight - 0.001) * multiple + 0.001
+    }
+    
+    for i=0, nclist_out1.count-1 {
+	nclist_out1.o(i).weight = (nclist_out1.o(i).weight - OUT1_I) * multiple + OUT1_I
+    }
+
+    for i=0, nclist_out2.count-1 {
+	nclist_out2.o(i).weight = (nclist_out2.o(i).weight - OUT1_I) * multiple + OUT1_I
+    }
+    
+    inhib_io_ave = (IO_I2E + IO_I2I) * 0.5
+    
+    for i=0, nclist_i2o.count-1 {
+	nclist_i2o.o(i).weight = (nclist_i2o.o(i).weight - IO_I2I) * multiple + inhib_io_ave
+    }
+
 }
