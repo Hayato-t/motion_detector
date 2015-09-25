@@ -40,7 +40,7 @@ proc setStim(){local i, j, stim_num, num_vta, dur, num_cs, stim_int, num_ecell_i
     for cls=0, data_num*l_times-1{
 	for(i=0;i<num_cell_out1;i+=1){
 
-	    if((i>=section_out1_e*stim_order.x(cls) && i<section_out1_e*(stim_order.x(cls)+1)) || (i>=num_ecell_out1+section_out1_i*stim_order.x(cls) && i<section_out1_e+section_out1_i*(stim_order.x(cls)+1))){
+	    if((i>=section_out1_e*stim_order.x(cls) && i<section_out1_e*(stim_order.x(cls)+1)) || (i>=num_ecell_out1+section_out1_i*stim_order.x(cls) && i<num_ecell_out1+section_out1_i*(stim_order.x(cls)+1))){
 		if(pc.gid_exists(i+num_cell_input)){
 		    pc.gid2cell(i+num_cell_input).soma {
 			//for j=0, l_times-1{
@@ -94,7 +94,7 @@ proc setStim(){local i, j, stim_num, num_vta, dur, num_cs, stim_int, num_ecell_i
 			cs_tmp = new NetStim()
 			cs_tmp.start = startTest+cls*600
 			cs_tmp.interval = stim_int
-			cs_tmp.number = 25
+			cs_tmp.number = 19
 			cs_tmp.noise = 0
 			cs.append(cs_tmp)
 			nc = new NetCon(cs_tmp,pc.gid2cell(i).synlist.object(0),0,0.1,0.25)//0.1)

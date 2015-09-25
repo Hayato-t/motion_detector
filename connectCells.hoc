@@ -293,8 +293,9 @@ proc set_LR_Separate(){local i, j, start_cell, end_cell, specialLR
     start_cell = $1
     end_cell = $2
     
-    specialLR = LEARNING_RATE*1.5
-    
+    //specialLR = LEARNING_RATE*1.5
+    specialLR = LEARNING_RATE*1.8
+
     for i=start_cell, end_cell{
 	if(pc.gid_exists(i)){
 	    for j=0, pc.gid2cell(i).synlist_e.count-1 {
