@@ -118,7 +118,7 @@ proc setStim(){local i, j, stim_num, num_vta, dur, num_cs, stim_int, num_ecell_i
 		    spon_tmp.del = 20
 		    spon_tmp.forseed = i
 		    
-		    if((i>=num_cell_input+num_ecell_out1 && i<num_cell_input+num_cell_out1) && (i>=num_cell_input+num_cell_out1+num_ecell_out2 && i<num_cell_full)){
+		    if((i>=num_cell_input+num_ecell_out1 && i<num_cell_input+num_cell_out1) || (i>=num_cell_input+num_cell_out1+num_ecell_out2 && i<num_cell_full)){
 			spon_tmp.KAPPA = OUT1_SPON_I_K
 			spon_tmp.THETA = OUT1_SPON_I_T
 			
@@ -128,8 +128,8 @@ proc setStim(){local i, j, stim_num, num_vta, dur, num_cs, stim_int, num_ecell_i
 		    }else if(i>=num_cell_input+num_cell_out1 && i<num_cell_input+num_cell_out1+num_ecell_out2){
 			spon_tmp.KAPPA = 0.15
 		    }else{
-			spon_tmp.KAPPA = 0.11
-			spon_tmp.THETA = 0.25
+			spon_tmp.KAPPA = 0.45
+			spon_tmp.THETA = 0.5
 		    }
 
 		    nc = new NetCon(spon_tmp,pc.gid2cell(i).synlist.object(1),0,0.1,0.02)
