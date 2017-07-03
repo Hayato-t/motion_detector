@@ -15,20 +15,24 @@ if(!name_declared("OUT1_SPON_I_T")) { OUT1_SPON_I_T=0.25 }
 if(!name_declared("LTD")) { LTD=1 }
 if(!name_declared("MAXWEIGHT")) { MAXWEIGHT=1 }
 // if(!name_declared("LR_INPUT")){ LR_INPUT=0.0001 }
-// if(!name_declared("LR_OUT")){ LR_OUT=0.0001 }
-v_init = -65
-NCELL = 512
-NCELL_E = 256 //must be (<NCELL)
-NCELL_OUT1 = 400
-NCELL_OUT1_E = 320
-NCELL_OUT2 = 100 //this number should be considered more
-NCELL_OUT2_E = 80
-NCELL_VTA = 10
-NCELL_CS = 10
-NSYN = 10
-NSYN_MAX = (NCELL-1)*NSYN
 
-NCELL_FULL = NCELL + NCELL_OUT1 + NCELL_OUT2
+// default parameters
+v_init = -65
+
+N_EACH_LANRN = 1024 //32*32 per R1-6 neuron, L1,2,4 neuron
+N_EACH_MENRN = 256 //Mi1, Tm3, Tm1,Tm2 neuron
+N_EACH_CNRN = 128 //C2, C3 neuron, feedback from medulla to lamina
+N_EACH_LONRN = 128 //T4,T5 neuron
+N_EACH_LTPCNRN = 128 //HS(right and left) and VS(up and down),integration of T4 and T5
+
+//##TODO:DEFINE THE BALANCE OF EXCITATORY NEURON AND INHIBITORY NEURON##
+
+//##TODO:DEFINE NUMBER OF SYNAPSE##
+//NSYN = 10
+//NSYN_MAX = (NCELL-1)*NSYN
+
+NCELL_FULL = N_EACH_LANRN * 9 + N_EACH_MENRN * 4 + N_EACH_CNRN * 2 + N_EACH_LONRN * 2 + N_EACH_LTPCNRN * 4
+
 SECTION_OUT1_E = int(NCELL_OUT1_E/5)
 SECTION_OUT1_I = int((NCELL_OUT1-NCELL_OUT1_E)/5)
 SECTION_OUT2_E = int(NCELL_OUT2_E/4)
