@@ -160,12 +160,10 @@ stim_flag = 0
 stim_flag_move = 0
 stim_counter=0
 datiming = 2.5
-
 changeFlags1(0,64,320,336,400,100,512,320,80)
 changeFlags2(0,20,80,85,400,100,512,320,80)
 forTestOut1()
 //forTestOut2()
-
 rec_timing=0
 rec_counter=0
 //objref weight_rec_i[30000], weight_rec_o1[30000], weight_rec_o2[30000]
@@ -179,7 +177,6 @@ for(time=0;time<tstop_max;time+=datiming){
     pc.psolve(time+datiming)
     pc.barrier()
     signalDA(NCELL_VTA,NCELL_E,NSYN_MAX,NCELL_FULL,NCELL,NCELL_OUT1,NCELL_OUT2,NCELL_OUT1_E,NCELL_OUT2_E)
-
     if(time>=init_time){
 	init_time += init_interval
 	initDA()
