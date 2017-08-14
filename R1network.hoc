@@ -1,4 +1,4 @@
-load_file("nrngui.hoc")
+lad_file("nrngui.hoc")
 load_file("mkcell.hoc")
 v_init = -65
 
@@ -7,9 +7,11 @@ N_EACH_RNRN = 1024
 objref pc
 pc = new ParallelContext()
 
+/* Network Definition */
+objref celllist
+celllist = GenerateNrn(N_EACH_RNRN)
 
-GenerateNrn(N_EACH_RNRN)
-
+/* Beginning of Calculation */
 tstop = 100
 dt = 0.01
 finitialize(v_init)

@@ -36,7 +36,7 @@ proc read_mat() {local i,j,k,num_ecell, num_out1, branch_num
     con_order_input = new Matrix()
     f = new File()
     f.ropen("con_order_input.dat")
-    con_order_input.scanf(f,num_ecell*branch_num,16)
+    con_order_input.scanf(f,num_ecell*branch_num,16) //nandakono magic number
 
     
     //read the connection file of output1 layer
@@ -90,32 +90,6 @@ proc read_mat() {local i,j,k,num_ecell, num_out1, branch_num
     f.ropen("con_order_i2o2.dat")
     con_order_i2o2.scanf(f,num_out2*branch_num,72)
 
-    
-    /*
-    //read the stimulus pattern
-    for i=1, data_num {
-	f = new File()
-	sprint(filename,"./data/stim%d.dat",i)
-	f.ropen(filename)
-	if(i==1){
-	    stim_data1 = new Vector()
-	    stim_data1.scanf(f,num_ecell)
-	}else if(i==2){
-	    stim_data2 = new Vector()
-	    stim_data2.scanf(f,num_ecell)
-	}else if(i==3){
-	    stim_data3 = new Vector()
-	    stim_data3.scanf(f,num_ecell)
-	}else if(i==4){
-	    stim_data4 = new Vector()
-	    stim_data4.scanf(f,num_ecell)
-	}else{
-	    stim_data5 = new Vector()
-	    stim_data5.scanf(f,num_ecell)
-	}
-	f.close()
-    }
-    */
     for i=0, data_num-1{
         f = new File()
         sprint(filename,"./data/stim%d.dat",i+1)
