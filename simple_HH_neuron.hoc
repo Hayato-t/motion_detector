@@ -1,0 +1,37 @@
+// simple hh neuron template definition
+// edited by hayato-t on 2017/08/21
+load_file("nrngui.hoc")
+begintemplate HHneuron
+  public soma, axon, ap_dend, esyn
+  create soma, axon, ap_dend
+  objref esyn
+  proc init(){
+    soma {
+      L = 30
+      soma.diam = 30
+      soma.nseg = 1
+      soma insert hh
+    }
+    axon {
+      diam = 0.2
+      nseg = 20
+      insert hh
+    }
+    ap_dend {
+      L = 500
+      diam = 2
+      nseg = 23
+      insert hh
+      gnabar_hh = 0.0.12
+      gkbar_hh = 0.0036
+      gl_hh = 0.00003
+    }
+    connect soma(0), axon(1)
+    connect ap_dend(0), soma(1)
+    ap_dend esyn = new Exp2Syn(0.5)
+    esyn.tau1 = 0.5
+    esyn.tau2 = 1.0
+    esyn.e = 0
+  }
+endtemplate HHneuron
+
