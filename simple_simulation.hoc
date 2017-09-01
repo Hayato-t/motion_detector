@@ -5,22 +5,20 @@ v_init = -65
 dtime = 2.5
 tstop_max = 200
 dt = 0.01
-R_width = 10
-R = 10
-firstlayer_width = 10
-firstlayer_height = 10
+firstlayer_width = 5
+firstlayer_height = 5
 
 R_num = firstlayer_width * firstlayer_height
 L1_num = R_num
 L2_num = R_num
 total_created_neuron = 0
 objref pc
-objref cell_list, netcon_list
+objref cell_list, netcon_list, synapse_list
 pc = new ParallelContext()
 cell_list = new List()
 netcon_list = new List()
-
-objref neuron, netcon, nil
+synapse_list = new List()
+objref neuron, netcon, nil, synapse
 // make R HH neuron
 for(i = pc.id; i < R_num; i = i + pc.nhost) {
   neuron = new HHneuron()
@@ -32,52 +30,49 @@ for(i = pc.id; i < R_num; i = i + pc.nhost) {
 }
 total_created_neuron += R_num
 pc.barrier()
-printf("%d\n",total_created_neuron)
 
 //make L1 and L2 neuron
 for(i = pc.id; i < L1_num; i = i + pc.nhost) {
   neuron = new HHneuron()
   pc.set_gid2node(i + total_created_neuron, pc.id)
-  if(pc.gid_exists(i)) {
-    pc.gid2cell(i).axon netcon = new NetCon(&v(0.5), neuron.esyn, 0, 0.1, 0.5)
-    pc.cell(i + total_created_neuron, netcon)
-    cell_list.append(neuron)
-    netcon_list.append(netcon)
-  } else {
-    printf("no gid")
-  }
+  pc.gid2cell(i).axon synapse = new NetCon(&v(0.5), neuron.esyn, 0, 0.1, 0.5)
+  neuron.axon netcon = new NetCon(&v(0.5), nil, 0, 1, 0.25)
+  pc.cell(i + total_created_neuron, netcon)
+  cell_list.append(neuron)
+  synapse_list.append(synapse)
+  netcon_list.append(netcon)
 }
 
 total_created_neuron += L1_num
 pc.barrier()
-printf("%d\n",total_created_neuron)
+
 for(i = pc.id; i < L2_num; i = i + pc.nhost) {
   neuron = new HHneuron()
   pc.set_gid2node(i + total_created_neuron, pc.id)
-  if(pc.gid_exists(i)) {
-    pc.gid2cell(i).axon netcon = new NetCon(&v(0.5), neuron.esyn, 0, 0.2, 0.5)
-    pc.cell(i + total_created_neuron, netcon)
-    cell_list.append(neuron)
-    netcon_list.append(netcon)
-  } else {
-    printf("no gid")
-  }
+  pc.gid2cell(i).axon synapse = new NetCon(&v(0.5), neuron.esyn, 0, 0.2, 0.5)
+  neuron.axon netcon = new NetCon(&v(0.5), nil, 0, 1, 0.25)
+  pc.cell(i + total_created_neuron, netcon)
+  cell_list.append(neuron)
+  synapse_list.append(synapse)
+  netcon_list.append(netcon)
 }
 total_created_neuron += L2_num
 pc.barrier()
 
 // make stimuli
+load_file("make_stimulation.hoc")
 objref inputstim_list, inputstim_netcon_list
 objref stim_input
 inputstim_list = new List()
 inputstim_netcon_list = new List()
+makeStimulation("",R_num)
 for i=0,R_num-1 {
   if(pc.gid_exists(i)){
     pc.gid2cell(i).soma {
       stim_input = new NetStim()
       stim_input.start = i + 5
       stim_input.interval = 10
-      stim_input.number = 5
+      stim_input.number = 1
       stim_input.noise = 0
       inputstim_list.append(stim_input)
       netcon = new NetCon(stim_input, pc.gid2cell(i).esyn,0,0,0.2)
@@ -92,11 +87,10 @@ objref tvec, idvec
 tvec = new Vector()
 idvec = new Vector()
 //pc.spike_record(-1, tvec, idvec)
-for i=0, 150-1 {
+for i=0, total_created_neuron-1 {
   if(pc.gid_exists(i)){
+    printf("%d\n",i)
     pc.spike_record(i,tvec,idvec)
-  } else{
-    printf("no gid %d",i)
   }
 }
 pc.barrier()
@@ -106,7 +100,6 @@ fcurrent()
 pc.set_maxstep(10)
 stdinit()
 steptime = dt
-
 for(time = 0; time < tstop_max; time += dtime){
   pc.psolve(time+dtime)
   pc.barrier()

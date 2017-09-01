@@ -1,0 +1,28 @@
+load_file("nrngui.hoc")
+
+proc makeStimulation(){local filepath, inputlayer_num, fps, max_input_num localobj file, input_matrix, stim_input
+  filepath = $1
+  inputlayer_num = $2
+  fps = $3
+  max_input_num = 10
+  input_matrix = new Matrix()
+  file = new File()
+  file.ropen(filepath)
+  input_matrix.scanf(file)
+  if(inputlayer_num != input_matrix.ncol){
+    printf("ERROR: ncol in input_matrix must be equal to inputlayer_num.")
+  } else{
+    for i=0, input_matrix.nrow-1 {
+      for j=0,inputlayer_num-1 {
+        if(pc.gid_exists(j)){
+          stim_input = new NetStim()
+          stim_input.start = 5 + i / fps
+          stim_input.interval = 1 / (fps * max_input_num * input_matrix.x[i][j])
+          stim_input.number = input_matrix.x[i][j] * max_input_num
+          stim_input.noise = 0
+          netcon = new NetCon(stim_input, pc.gid2cell(j).esyn,0,0,0.2)
+        }
+      }
+    }
+  }
+}
