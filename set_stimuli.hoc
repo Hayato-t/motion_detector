@@ -1,0 +1,15 @@
+load_file("nrngui.hoc")
+
+objref f
+objref stimuli_data
+proc loadStimuli() { local scale, time
+  strdef file
+  scale = $1 * $2
+  time = $3
+  stimuli_data = new Matrix()
+  f = new File()
+  f.ropen($s4)
+  stimuli_data.scanf(f,time,scale)
+  f.close()
+  
+}

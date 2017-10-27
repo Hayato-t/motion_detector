@@ -1,0 +1,132 @@
+load_file("nrngui.hoc")
+load_file("simple_HH_neuron.hoc")
+load_file("set_stimuli.hoc")
+v_init = -65
+dtime = 0.1
+tstop_max = 500
+dt = 0.01
+firstlayer_width = 5
+firstlayer_height = 5
+time = 16
+fps = 0.1
+strdef filename
+filename = "converted.txt"
+R_num = firstlayer_width * firstlayer_height
+L1_num = R_num
+L2_num = R_num
+total_created_neuron = 0
+objref pc
+objref cell_list, netcon_list, synapse_list
+pc = new ParallelContext()
+cell_list = new List()
+netcon_list = new List()
+synapse_list = new List()
+objref neuron, netcon, nil, synapse
+objref L1synapse, L2synapse
+// make R HH neuron
+for(i = pc.id; i < R_num; i = i + pc.nhost) {
+  neuron = new HHneuron()
+  pc.set_gid2node(i,pc.id)
+  neuron.axon netcon = new NetCon(&v(0.5), nil, 0, 1, 0.25)
+  pc.cell(i,netcon)
+  cell_list.append(neuron)
+  netcon_list.append(netcon)
+}
+total_created_neuron += R_num
+pc.barrier()
+
+//make L1 and L2 neuron
+L1index = total_created_neuron
+for(i = pc.id; i < L1_num; i = i + pc.nhost) {
+  neuron = new HHneuron()
+  pc.set_gid2node(i + total_created_neuron, pc.id)
+  neuron.axon netcon = new NetCon(&v(0.5), nil, 0, 1, 0.25)
+  pc.cell(i + total_created_neuron, netcon)
+  cell_list.append(neuron)
+  netcon_list.append(netcon)
+}
+
+total_created_neuron += L1_num
+pc.barrier()
+
+L2index = total_created_neuron
+for(i = pc.id; i < L2_num; i = i + pc.nhost) {
+  neuron = new HHneuron()
+  pc.set_gid2node(i + total_created_neuron, pc.id)
+  neuron.axon netcon = new NetCon(&v(0.5), nil, 0, 1, 0.25)
+  pc.cell(i + total_created_neuron, netcon)
+  cell_list.append(neuron)
+  netcon_list.append(netcon)
+}
+total_created_neuron += L2_num
+pc.barrier()
+
+// make synaptic connection
+for(i = pc.id; i < R_num; i = i + pc.nhost) {
+  pc.gid2cell(i).axon L1synapse = new NetCon(&v(0.5), pc.gid2cell(L1index + i).esyn, 0, 0.2, 0.5)
+  pc.gid2cell(i).axon L2synapse = new NetCon(&v(0.5), pc.gid2cell(L2index + i).esyn, 0, 0.2, 0.5)
+  synapse_list.append(L1synapse)
+  synapse_list.append(L2synapse)
+}
+
+// make stimuli
+loadStimuli(firstlayer_width,firstlayer_height,time,filename)
+objref inputstim_list, inputstim_netcon_list
+objref stim_input
+inputstim_list = new List()
+inputstim_netcon_list = new List()
+for i=0,time-1 {
+  for j=0,R_num-1 {
+    if(pc.gid_exists(j)){
+      pc.gid2cell(j).soma {
+        stim_input = new NetStim()
+        stim_input.start = i/fps + 5
+        stim_input.interval = 1
+        stim_input.number = stimuli_data.x[i][j] * 10
+        stim_input.noise = 0
+        inputstim_list.append(stim_input)
+        netcon = new NetCon(stim_input, pc.gid2cell(j).esyn,0,0,0.2)
+        inputstim_netcon_list.append(netcon)
+      }
+    }
+  }
+}
+
+pc.barrier()
+
+objref tvec, idvec
+tvec = new Vector()
+idvec = new Vector()
+//pc.spike_record(-1, tvec, idvec)
+for i=0, total_created_neuron-1 {
+  if(pc.gid_exists(i)){
+    printf("%d\n",i)
+    pc.spike_record(i,tvec,idvec)
+  }
+}
+pc.barrier()
+
+finitialize(v_init)
+fcurrent()
+pc.set_maxstep(10)
+stdinit()
+steptime = dt
+for(time = 0; time < tstop_max; time += dtime){
+  pc.psolve(time+dtime)
+  pc.barrier()
+}
+pc.barrier()
+objref saveSpike
+strdef filename
+saveSpike = new File()
+sprint(filename, "./result/test_spike_pid%d.txt",pc.id)
+saveSpike.wopen(filename)
+for i=0,tvec.size()-1 {
+  saveSpike.printf("%g\t%g\n",tvec.x(i),idvec.x(i))
+}
+saveSpike.close()
+
+pc.barrier()
+
+pc.runworker()
+pc.done()
